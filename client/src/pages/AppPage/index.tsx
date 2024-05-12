@@ -1,5 +1,5 @@
 import {
-	Box,
+	Badge,
 	Container,
 	Divider,
 	Flex,
@@ -7,12 +7,15 @@ import {
 	Highlight,
 	Text,
 } from "@chakra-ui/react";
+import CategoryBox from "../../components/CategoryBox";
 
 const AppPage: React.FC = () => {
 	return (
 		<>
 			<Container maxW="container.lg" bg="gray.50" p="8" minH="100vh">
-				<Text pb="4">STATUS: WHAR</Text>
+				<Text pb="4">
+					STATUS: <Badge colorScheme="green">ONGOING</Badge>
+				</Text>
 				<Divider />
 				<Heading m="8" textAlign="center">
 					<Highlight
@@ -29,46 +32,26 @@ const AppPage: React.FC = () => {
 					justifyContent="center"
 					alignItems="center"
 					p="4">
-					<Box
-						maxW="sm"
-						border="2px"
-						borderColor="green.700"
-						p="3"
-						textAlign="center"
-						bg="green.100"
-						borderRadius="15"
-						cursor="pointer">
-						<Heading size="lg">CATEGORY</Heading>
-						<Divider my="2" />
-						<Text>+x points</Text>
-					</Box>
-					<Box
-						maxW="sm"
-						border="2px"
-						borderColor="green.700"
-						p="3"
-						textAlign="center"
-						bg="green.100"
-						borderRadius="15"
-						cursor="pointer">
-						<Heading size="lg">CATEGORY</Heading>
-						<Divider my="2" />
-						<Text>+x points</Text>
-					</Box>
-					<Box
-						maxW="sm"
-						border="2px"
-						borderColor="green.700"
-						p="3"
-						textAlign="center"
-						bg="green.100"
-						borderRadius="15"
-						cursor="pointer">
-						<Heading size="lg">CATEGORY</Heading>
-						<Divider my="2" />
-						<Text>+x points</Text>
-					</Box>
+					<CategoryBox
+						categoryText="easy"
+						categoryPoints={2}
+						categoryColor="blue"
+					/>
+					<CategoryBox
+						categoryText="Medium"
+						categoryPoints={3}
+						categoryColor="yellow"
+					/>
+					<CategoryBox
+						categoryText="hard"
+						categoryPoints={4}
+						categoryColor="red"
+					/>
 				</Flex>
+				<Text textAlign="center" fontStyle="italic" color="gray.400">
+					If the answer is correct, user will get the stated points. If the
+					answer is incorrect, user will get +1 point for participation
+				</Text>
 			</Container>
 		</>
 	);
