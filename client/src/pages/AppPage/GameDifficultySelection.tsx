@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, useRadioGroup } from "@chakra-ui/react";
 import CategoryBox, { CategoryBoxProps } from "../../components/CategoryBox";
 
 interface GameDifficultySelectionProps {
@@ -8,6 +8,14 @@ interface GameDifficultySelectionProps {
 const GameDifficultySelectionSubPage: React.FC<GameDifficultySelectionProps> = (
 	props
 ) => {
+	const { getRootProps, getRadioProps } = useRadioGroup({
+		name: "category",
+		onChange: console.log,
+		// pass this to parent component with an onChange prop
+		//TODO: add categoryId to interface
+	});
+
+	const group = getRootProps();
 	return (
 		<>
 			<Flex
@@ -18,7 +26,14 @@ const GameDifficultySelectionSubPage: React.FC<GameDifficultySelectionProps> = (
 				alignItems="center"
 				p="4">
 				{props.selection.map((category, i) => {
-					return <CategoryBox key={`category-box-${i}`} {...category} />;
+					const radio = getRadioProps({ value: category });
+					return (
+						<CategoryBox
+							key={`category-box-${i}`}
+							{...category}
+							radioProps={radio}
+						/>
+					);
 				})}
 			</Flex>
 			<Text textAlign="center" fontStyle="italic" color="gray.400">

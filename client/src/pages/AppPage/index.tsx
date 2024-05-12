@@ -2,19 +2,24 @@ import {
 	Badge,
 	Container,
 	Divider,
+	Flex,
 	Heading,
 	Highlight,
 	Text,
 } from "@chakra-ui/react";
 import GameDifficultySelectionSubPage from "./GameDifficultySelection";
+import Clock from "../../components/Clock";
 
 const AppPage: React.FC = () => {
 	return (
 		<>
 			<Container maxW="container.lg" bg="gray.50" p="8" minH="100vh">
-				<Text pb="4">
-					STATUS: <Badge colorScheme="green">ONGOING</Badge>
-				</Text>
+				<Flex flexDirection="row" justifyContent="space-between">
+					<Text pb="4">
+						STATUS: <Badge colorScheme="green">ONGOING</Badge>
+					</Text>
+					<Clock />
+				</Flex>
 				<Divider />
 				<Heading m="8" textAlign="center">
 					<Highlight
