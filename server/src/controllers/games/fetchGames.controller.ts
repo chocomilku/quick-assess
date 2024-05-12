@@ -13,7 +13,13 @@ export const fetchGamesController: RequestHandler = async (req, res, next) => {
 		// fix: coerce boolean
 		const query = z
 			.object({
-				active: z.coerce.boolean().optional(),
+				active: z
+					.string()
+					.optional()
+					.refine((val) => val === "true" || val === "false", {
+						message: "Value must be a boolean",
+					})
+					.transform((val) => val === "true"),
 				limit: z.number().optional(),
 				offset: z.number().optional(),
 			})
@@ -23,8 +29,6 @@ export const fetchGamesController: RequestHandler = async (req, res, next) => {
 			const formattedError = fromZodError(query.error);
 			throw new BadRequestError(formattedError.message);
 		}
-
-		console.log(query.data);
 
 		let active = query.data.active ?? false;
 		let limit = query.data.limit ?? 5;
