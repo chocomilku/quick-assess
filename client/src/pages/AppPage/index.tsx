@@ -2,12 +2,11 @@ import {
 	Badge,
 	Container,
 	Divider,
-	Flex,
 	Heading,
 	Highlight,
 	Text,
 } from "@chakra-ui/react";
-import CategoryBox from "../../components/CategoryBox";
+import GameDifficultySelectionSubPage from "./GameDifficultySelection";
 
 const AppPage: React.FC = () => {
 	return (
@@ -25,33 +24,17 @@ const AppPage: React.FC = () => {
 					</Highlight>
 				</Heading>
 				<Divider />
-				<Flex
-					gap="12"
-					wrap="wrap"
-					flexDirection="row"
-					justifyContent="center"
-					alignItems="center"
-					p="4">
-					<CategoryBox
-						categoryText="easy"
-						categoryPoints={2}
-						categoryColor="blue"
-					/>
-					<CategoryBox
-						categoryText="Medium"
-						categoryPoints={3}
-						categoryColor="yellow"
-					/>
-					<CategoryBox
-						categoryText="hard"
-						categoryPoints={4}
-						categoryColor="red"
-					/>
-				</Flex>
-				<Text textAlign="center" fontStyle="italic" color="gray.400">
-					If the answer is correct, user will get the stated points. If the
-					answer is incorrect, user will get +1 point for participation
-				</Text>
+				<GameDifficultySelectionSubPage
+					selection={[
+						{ categoryText: "easy", categoryPoints: 2, categoryColor: "blue" },
+						{
+							categoryText: "medium",
+							categoryPoints: 3,
+							categoryColor: "yellow",
+						},
+						{ categoryText: "hard", categoryPoints: 4, categoryColor: "red" },
+					]}
+				/>
 			</Container>
 		</>
 	);

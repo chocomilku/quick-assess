@@ -33,4 +33,4 @@ const CategoryBox: React.FC<CategoryBoxProps> = (props) => {
 };
 
 export default CategoryBox;
-export { CategoryBox };
+export type { CategoryBoxProps };
