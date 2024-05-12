@@ -15,11 +15,9 @@ export const fetchGamesController: RequestHandler = async (req, res, next) => {
 			.object({
 				active: z
 					.string()
-					.optional()
-					.refine((val) => val === "true" || val === "false", {
-						message: "Value must be a boolean",
-					})
-					.transform((val) => val === "true"),
+					.refine((val) => val === "true" || val === "false")
+					.transform((val) => val === "true")
+					.optional(),
 				limit: z.number().optional(),
 				offset: z.number().optional(),
 			})
