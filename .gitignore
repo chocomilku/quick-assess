@@ -20,3 +20,8 @@ coverage/
 *.tmp
 *.log
 *.DS_Store
+
+# sqlite db
+*.db 
+*.sqlite 
+*.sqlite3
