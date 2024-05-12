@@ -12,12 +12,13 @@ import {
 	Input,
 	Text,
 	Textarea,
+	Tooltip,
 	VStack,
 } from "@chakra-ui/react";
 import GameDifficultySelectionSubPage from "./GameDifficultySelection";
 import Clock from "../../components/Clock";
 import { CategoryBoxProps } from "../../components/CategoryBox";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 interface FormValue {
 	name: string;
@@ -43,7 +44,12 @@ const AppPage: React.FC = () => {
 		setFormValue((prevState) => ({ ...prevState, [property]: newValue }));
 	};
 
+	const validateForm = useMemo(() => {
+		return formValue.name != "" && formValue.answer != "";
+	}, [formValue]);
+
 	const handleSubmit = () => {
+		if (!validateForm) return;
 		alert(`name: ${formValue.name}, answer: ${formValue.answer}`);
 		setFormValue({
 			name: "",
@@ -128,13 +134,19 @@ const AppPage: React.FC = () => {
 									onChange={(e) => handleFormChange("answer", e.target.value)}
 								/>
 							</FormControl>
-							<Button
-								colorScheme="green"
-								variant="outline"
-								size="lg"
-								onClick={handleSubmit}>
-								Submit
-							</Button>
+							<Tooltip
+								label="Make sure that every required form is filled up."
+								placement="top"
+								isDisabled={validateForm}>
+								<Button
+									colorScheme="green"
+									variant="outline"
+									size="lg"
+									onClick={handleSubmit}
+									isDisabled={!validateForm}>
+									Submit
+								</Button>
+							</Tooltip>
 						</VStack>
 					</>
 				)}
