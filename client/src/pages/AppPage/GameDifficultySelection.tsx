@@ -3,19 +3,24 @@ import CategoryBox, { CategoryBoxProps } from "../../components/CategoryBox";
 
 interface GameDifficultySelectionProps {
 	selection: CategoryBoxProps[];
+	onChange: (selected: CategoryBoxProps) => void;
 }
 
 const GameDifficultySelectionSubPage: React.FC<GameDifficultySelectionProps> = (
 	props
 ) => {
-	const { getRootProps, getRadioProps } = useRadioGroup({
+	const { getRadioProps } = useRadioGroup({
 		name: "category",
-		onChange: console.log,
-		// pass this to parent component with an onChange prop
-		//TODO: add categoryId to interface
+		onChange: (value) => {
+			const selectedCategory = props.selection.find(
+				(category) => category.categoryId === Number(value)
+			);
+			if (selectedCategory) {
+				props.onChange(selectedCategory);
+			}
+		},
 	});
 
-	const group = getRootProps();
 	return (
 		<>
 			<Flex
@@ -26,7 +31,7 @@ const GameDifficultySelectionSubPage: React.FC<GameDifficultySelectionProps> = (
 				alignItems="center"
 				p="4">
 				{props.selection.map((category, i) => {
-					const radio = getRadioProps({ value: category });
+					const radio = getRadioProps({ value: category.categoryId });
 					return (
 						<CategoryBox
 							key={`category-box-${i}`}

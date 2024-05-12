@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 interface CategoryBoxProps {
+	categoryId: number;
 	categoryText: string;
 	categoryPoints: number;
 	categoryColor: BackgroundProps["bg"];
@@ -21,7 +22,6 @@ const CategoryBox: React.FC<CategoryBoxPropsAsRadio> = (props) => {
 
 	const input = getInputProps();
 	const radio = getRadioProps();
-	const { radioProps, ..._category } = props;
 
 	return (
 		<>

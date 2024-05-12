@@ -9,8 +9,17 @@ import {
 } from "@chakra-ui/react";
 import GameDifficultySelectionSubPage from "./GameDifficultySelection";
 import Clock from "../../components/Clock";
+import { CategoryBoxProps } from "../../components/CategoryBox";
+import { useState } from "react";
 
 const AppPage: React.FC = () => {
+	const [selectedCategory, setSelectedCategory] =
+		useState<CategoryBoxProps | null>(null);
+
+	const handleCategoryChange = (selected: CategoryBoxProps) => {
+		setSelectedCategory(selected);
+	};
+
 	return (
 		<>
 			<Container maxW="container.lg" bg="gray.50" p="8" minH="100vh">
@@ -30,14 +39,26 @@ const AppPage: React.FC = () => {
 				</Heading>
 				<Divider />
 				<GameDifficultySelectionSubPage
+					onChange={handleCategoryChange}
 					selection={[
-						{ categoryText: "easy", categoryPoints: 2, categoryColor: "blue" },
 						{
+							categoryId: 1,
+							categoryText: "easy",
+							categoryPoints: 2,
+							categoryColor: "blue",
+						},
+						{
+							categoryId: 2,
 							categoryText: "medium",
 							categoryPoints: 3,
 							categoryColor: "yellow",
 						},
-						{ categoryText: "hard", categoryPoints: 4, categoryColor: "red" },
+						{
+							categoryId: 3,
+							categoryText: "hard",
+							categoryPoints: 4,
+							categoryColor: "red",
+						},
 					]}
 				/>
 			</Container>
