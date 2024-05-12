@@ -19,12 +19,37 @@ import Clock from "../../components/Clock";
 import { CategoryBoxProps } from "../../components/CategoryBox";
 import { useState } from "react";
 
+interface FormValue {
+	name: string;
+	answer: string;
+}
+
 const AppPage: React.FC = () => {
 	const [selectedCategory, setSelectedCategory] =
 		useState<CategoryBoxProps | null>(null);
+	const [formValue, setFormValue] = useState<FormValue>({
+		name: "",
+		answer: "",
+	});
 
 	const handleCategoryChange = (selected: CategoryBoxProps) => {
 		setSelectedCategory(selected);
+	};
+
+	const handleFormChange = <K extends keyof FormValue>(
+		property: K,
+		newValue: FormValue[K]
+	) => {
+		setFormValue((prevState) => ({ ...prevState, [property]: newValue }));
+	};
+
+	const handleSubmit = () => {
+		alert(`name: ${formValue.name}, answer: ${formValue.answer}`);
+		setFormValue({
+			name: "",
+			answer: "",
+		});
+		setSelectedCategory(null);
 	};
 
 	return (
@@ -89,14 +114,25 @@ const AppPage: React.FC = () => {
 						<VStack>
 							<FormControl my={2} px={{ base: "2", md: "8" }} isRequired>
 								<FormLabel>Name</FormLabel>
-								<Input />
+								<Input
+									value={formValue.name}
+									onChange={(e) => handleFormChange("name", e.target.value)}
+								/>
 								<FormHelperText>Please type your last name.</FormHelperText>
 							</FormControl>
+
 							<FormControl my={2} px={{ base: "2", md: "8" }} isRequired>
 								<FormLabel>Answer</FormLabel>
-								<Textarea />
+								<Textarea
+									value={formValue.answer}
+									onChange={(e) => handleFormChange("answer", e.target.value)}
+								/>
 							</FormControl>
-							<Button colorScheme="green" variant="outline" size="lg">
+							<Button
+								colorScheme="green"
+								variant="outline"
+								size="lg"
+								onClick={handleSubmit}>
 								Submit
 							</Button>
 						</VStack>
