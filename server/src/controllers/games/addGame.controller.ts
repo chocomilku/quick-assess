@@ -26,7 +26,7 @@ export const addGameController: RequestHandler = async (req, res, next) => {
 			})
 			.executeTakeFirstOrThrow();
 
-		return res.status(200).json({ added: Number(addGame.insertId) });
+		return res.status(201).json({ added: Number(addGame.insertId) });
 	} catch (err) {
 		next(err);
 	}
