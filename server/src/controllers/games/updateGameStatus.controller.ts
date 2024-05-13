@@ -5,6 +5,7 @@ import { RequestHandler } from "express";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
 import sqlite from "better-sqlite3";
+import { logAction } from "@helpers/logging/log";
 
 export const updateGameStatusController: RequestHandler = async (
 	req,
@@ -34,6 +35,10 @@ export const updateGameStatusController: RequestHandler = async (
 
 		if (updatedGame.numUpdatedRows <= 0)
 			throw new InternalServerError("Game not updated");
+
+		logAction(
+			`Game ${id} status has been updated to ${sanitizedBody.data.isRunning}.`
+		);
 
 		return res.status(200).json({ updated: +id, ...sanitizedBody.data });
 	} catch (err) {

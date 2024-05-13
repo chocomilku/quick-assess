@@ -8,9 +8,6 @@ build/
 # Ignore environment variables
 .env
 
-# Ignore logs
-logs/
-
 # Ignore test coverage reports
 coverage/
 

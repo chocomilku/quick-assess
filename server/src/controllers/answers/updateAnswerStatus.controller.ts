@@ -1,5 +1,6 @@
 import { db } from "@database";
 import { booleanToNumber } from "@helpers/booleanToNumber";
+import { logAction } from "@helpers/logging/log";
 import { BadRequestError, NotFoundError } from "@middleware/errors";
 import { RequestHandler } from "express";
 import { z } from "zod";
@@ -48,6 +49,10 @@ export const updateAnswerStatusController: RequestHandler = async (
 
 		if (updatedAnswer.numUpdatedRows <= 0)
 			throw new NotFoundError("Answer not updated");
+
+		logAction(
+			`Answer ${id} status has been updated to ${sanitizedBody.data.isPass}`
+		);
 
 		return res.status(200).json({ updated: +id, ...sanitizedBody.data });
 	} catch (err) {

@@ -9,7 +9,6 @@ export const fetchGamesController: RequestHandler = async (req, res, next) => {
 	try {
 		const rawQuery = req.query;
 
-		// fix: coerce boolean
 		const query = z
 			.object({
 				active: z

@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import { BadRequestError } from "@middleware/errors";
 import { RequestHandler } from "express";
 import { z } from "zod";
@@ -26,6 +27,7 @@ export const addGameController: RequestHandler = async (req, res, next) => {
 			})
 			.executeTakeFirstOrThrow();
 
+		logAction(`Game ${Number(addGame.insertId)} has been added.`);
 		return res.status(201).json({ added: Number(addGame.insertId) });
 	} catch (err) {
 		next(err);

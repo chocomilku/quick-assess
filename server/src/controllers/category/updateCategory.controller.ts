@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import {
 	BadRequestError,
 	InternalServerError,
@@ -49,6 +50,8 @@ export const updateCategoryController: RequestHandler = async (
 
 		if (updateCategory.numUpdatedRows <= 0)
 			throw new InternalServerError("Category not updated");
+
+		logAction(`Category ${id} has been updated.`);
 
 		return res.status(200).json({ updated: +id, ...sanitizedBody.data });
 	} catch (err) {

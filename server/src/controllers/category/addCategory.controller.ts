@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import { BadRequestError } from "@middleware/errors";
 import { RequestHandler } from "express";
 import { z } from "zod";
@@ -30,6 +31,8 @@ export const addCategoryController: RequestHandler = async (req, res, next) => {
 				color: sanitizedBody.data.color,
 			})
 			.executeTakeFirstOrThrow();
+
+		logAction(`Category ${Number(addCategory.insertId)} has been added.`);
 
 		return res.status(201).json({ added: Number(addCategory.insertId) });
 	} catch (err) {

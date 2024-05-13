@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import { BadRequestError, NotFoundError } from "@middleware/errors";
 import { RequestHandler } from "express";
 import { z } from "zod";
@@ -48,6 +49,10 @@ export const addAnswerController: RequestHandler = async (req, res, next) => {
 				gameId: sanitizedBody.data.gameId,
 			})
 			.executeTakeFirstOrThrow();
+
+		logAction(
+			`${sanitizedBody.data.author} added an answer to question ${sanitizedBody.data.questionId}`
+		);
 
 		return res.status(201).json({ added: Number(addAnswer.insertId) });
 	} catch (err) {

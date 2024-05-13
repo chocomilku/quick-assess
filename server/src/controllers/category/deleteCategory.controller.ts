@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import { NotFoundError } from "@middleware/errors";
 import { RequestHandler } from "express";
 
@@ -22,6 +23,8 @@ export const deleteCategoryController: RequestHandler = async (
 		await db.deleteFrom("questions").where("categoryId", "==", +id).execute();
 
 		await db.deleteFrom("category").where("id", "==", +id).execute();
+
+		logAction(`Category ${id} and its questions have been deleted.`);
 
 		return res.status(204).end();
 	} catch (err) {

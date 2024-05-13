@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import { BadRequestError, NotFoundError } from "@middleware/errors";
 import { RequestHandler } from "express";
 
@@ -23,6 +24,8 @@ export const deleteGameController: RequestHandler = async (req, res, next) => {
 		await db.deleteFrom("category").where("gameId", "==", +id).execute();
 
 		await db.deleteFrom("games").where("id", "==", +id).execute();
+
+		logAction(`Game ${id} and its categories and questions have been deleted.`);
 
 		return res.status(204).end();
 	} catch (err) {
