@@ -6,7 +6,7 @@ export interface GamesTable {
 	 * 0: Not running
 	 * 1: Running
 	 */
-	isRunning: 0 | 1;
+	isRunning: Generated<number>;
 	name: string;
 }
 
