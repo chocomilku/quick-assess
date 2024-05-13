@@ -6,6 +6,7 @@ interface GameStatusBarProps {
 }
 
 const GameStatusBar: React.FC<GameStatusBarProps> = (props) => {
+	console.log(props);
 	return (
 		<>
 			<Flex flexDirection="row" justifyContent="space-between">
