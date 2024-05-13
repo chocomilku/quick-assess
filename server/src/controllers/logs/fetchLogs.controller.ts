@@ -26,6 +26,7 @@ export const fetchLogsController: RequestHandler = async (req, res, next) => {
 			.selectAll()
 			.limit(limit)
 			.offset(offset)
+			.orderBy("id", "desc")
 			.execute();
 
 		return res.status(200).json(logs);

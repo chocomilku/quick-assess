@@ -29,7 +29,8 @@ const GameDifficultySelectionSubPage: React.FC<GameDifficultySelectionProps> = (
 				flexDirection="row"
 				justifyContent="center"
 				alignItems="center"
-				p="4">
+				p="4"
+				w="full">
 				{props.selection.map((category, i) => {
 					const radio = getRadioProps({ value: category.categoryId });
 					return (

@@ -15,13 +15,20 @@ import {
 import GameDifficultySelectionSubPage from "./GameDifficultySelection";
 import { CategoryBoxProps } from "../../components/CategoryBox";
 import { useMemo, useState } from "react";
+import { Category, Question } from "@/interfaces/API";
 
 interface FormValue {
 	name: string;
 	answer: string;
 }
 
-const GamePage: React.FC = () => {
+interface GamePageProps {
+	topic: string;
+	categories: Category[];
+	questions: Question[];
+}
+
+const GamePage: React.FC<GamePageProps> = (props) => {
 	const [selectedCategory, setSelectedCategory] =
 		useState<CategoryBoxProps | null>(null);
 	const [formValue, setFormValue] = useState<FormValue>({
@@ -54,6 +61,14 @@ const GamePage: React.FC = () => {
 		setSelectedCategory(null);
 	};
 
+	const selectedQuestion = useMemo(() => {
+		if (selectedCategory == null) return null;
+		const question = props.questions.find(
+			(question) => question.categoryId === selectedCategory.categoryId
+		);
+		return question?.question ?? "";
+	}, [selectedCategory, props.questions]);
+
 	return (
 		<>
 			{selectedCategory == null ? (
@@ -62,32 +77,20 @@ const GamePage: React.FC = () => {
 						<Highlight
 							query="Topic:"
 							styles={{ p: "1", bg: "green.100", rounded: "6" }}>
-							Topic: Something
+							{`Topic: ${props.topic}`}
 						</Highlight>
 					</Heading>
 					<Divider />
 					<GameDifficultySelectionSubPage
 						onChange={handleCategoryChange}
-						selection={[
-							{
-								categoryId: 1,
-								categoryText: "easy",
-								categoryPoints: 2,
-								categoryColor: "blue",
-							},
-							{
-								categoryId: 2,
-								categoryText: "medium",
-								categoryPoints: 3,
-								categoryColor: "yellow",
-							},
-							{
-								categoryId: 3,
-								categoryText: "hard",
-								categoryPoints: 4,
-								categoryColor: "purple",
-							},
-						]}
+						selection={props.categories.map((category) => {
+							return {
+								categoryId: category.id,
+								categoryText: category.text,
+								categoryPoints: category.points,
+								categoryColor: category.color,
+							};
+						})}
 					/>
 				</>
 			) : (
@@ -96,7 +99,7 @@ const GamePage: React.FC = () => {
 						<Highlight
 							query="Question:"
 							styles={{ p: "1", bg: "green.100", rounded: "6" }}>
-							Question: Something about monkeys
+							{`Question: ${selectedQuestion}`}
 						</Highlight>
 						<Badge
 							mx="2"
