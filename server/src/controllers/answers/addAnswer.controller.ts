@@ -10,6 +10,8 @@ export const addAnswerController: RequestHandler = async (req, res, next) => {
 		const { id } = req.params;
 		const rawBody = req.body;
 
+		// add logic to check whether the same username had answered the game before
+
 		// check if question exists
 		const question = await db
 			.selectFrom("questions")
