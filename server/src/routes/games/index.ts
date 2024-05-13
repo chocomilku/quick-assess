@@ -8,6 +8,7 @@ import { updateGameStatusController } from "@controllers/games/updateGameStatus.
 import { updateGameController } from "@controllers/games/updateGame.controller";
 import { deleteGameController } from "@controllers/games/deleteGame.controller";
 import { addQuestionController } from "@controllers/questions/addQuestion.controller";
+import { addCategoryController } from "@controllers/category/addCategory.controller";
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.get("/", fetchGamesController);
 
 router.post("/", addGameController);
 router.post("/:gameId/questions", addQuestionController);
+router.post("/:gameId/category", addCategoryController);
 
 router.patch("/:id", updateGameStatusController);
 
