@@ -11,7 +11,6 @@ export const addGameController: RequestHandler = async (req, res, next) => {
 		const sanitizedBody = z
 			.object({
 				name: z.string(),
-				isRunning: z.number().optional(),
 			})
 			.safeParse(body);
 
@@ -20,13 +19,10 @@ export const addGameController: RequestHandler = async (req, res, next) => {
 			throw new BadRequestError(formattedError.message);
 		}
 
-		let isRunning = sanitizedBody.data.isRunning ?? 0;
-
 		const addGame = await db
 			.insertInto("games")
 			.values({
 				name: sanitizedBody.data.name,
-				isRunning,
 			})
 			.executeTakeFirstOrThrow();
 

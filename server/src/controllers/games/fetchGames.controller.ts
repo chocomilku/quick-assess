@@ -8,7 +8,6 @@ import { fromZodError } from "zod-validation-error";
 export const fetchGamesController: RequestHandler = async (req, res, next) => {
 	try {
 		const rawQuery = req.query;
-		console.log(rawQuery);
 
 		// fix: coerce boolean
 		const query = z
@@ -28,17 +27,21 @@ export const fetchGamesController: RequestHandler = async (req, res, next) => {
 			throw new BadRequestError(formattedError.message);
 		}
 
-		let active = query.data.active ?? false;
+		let active = query.data.active;
 		let limit = query.data.limit ?? 5;
 		let offset = query.data.offset ?? 0;
 
-		const games = await db
+		let dbQuery = db
 			.selectFrom("games")
-			.where("isRunning", "==", booleanToNumber(active))
 			.selectAll()
 			.limit(limit)
-			.offset(offset)
-			.execute();
+			.offset(offset);
+
+		if (active !== undefined) {
+			dbQuery = dbQuery.where("isRunning", "==", booleanToNumber(active));
+		}
+
+		const games = await dbQuery.execute();
 
 		// TODO: enable foreign key constraints PRAGMA foreign_key = 1; i thinkk
 
