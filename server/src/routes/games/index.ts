@@ -6,6 +6,7 @@ import { fetchCategoryByGameController } from "@controllers/category/fetchCatego
 import { addGameController } from "@controllers/games/addGame.controller";
 import { updateGameStatusController } from "@controllers/games/updateGameStatus.controller";
 import { updateGameController } from "@controllers/games/updateGame.controller";
+import { deleteGameController } from "@controllers/games/deleteGame.controller";
 
 const router = Router();
 
@@ -19,5 +20,7 @@ router.post("/", addGameController);
 router.patch("/:id", updateGameStatusController);
 
 router.put("/:id", updateGameController);
+
+router.delete("/:id", deleteGameController);
 
 export default router;
