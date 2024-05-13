@@ -1,4 +1,4 @@
-import { Container, Divider } from "@chakra-ui/react";
+import { Divider } from "@chakra-ui/react";
 import GameStatusBar from "./GameStatusBar";
 import GamePage from "./GamePage";
 
@@ -7,11 +7,9 @@ import GamePage from "./GamePage";
 const AppPage: React.FC = () => {
 	return (
 		<>
-			<Container maxW="container.lg" bg="gray.50" p="8" minH="100vh">
-				<GameStatusBar isPlaying={true} />
-				<Divider />
-				<GamePage />
-			</Container>
+			<GameStatusBar isPlaying={true} />
+			<Divider />
+			<GamePage />
 		</>
 	);
 };

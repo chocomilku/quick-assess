@@ -29,6 +29,7 @@ const CategoryBox: React.FC<CategoryBoxPropsAsRadio> = (props) => {
 				<input {...input} />
 				<Box
 					{...radio}
+					textColor={`${props.categoryColor}.800`}
 					maxW="sm"
 					border="2px"
 					borderColor={`${props.categoryColor}.700`}
