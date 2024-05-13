@@ -11,11 +11,13 @@ import {
 	Textarea,
 	Tooltip,
 	VStack,
+	useToast,
 } from "@chakra-ui/react";
 import GameDifficultySelectionSubPage from "./GameDifficultySelection";
 import { CategoryBoxProps } from "../../components/CategoryBox";
 import { useMemo, useState } from "react";
 import { Category, Question } from "@/interfaces/API";
+import axiosInstance from "@/api/axiosInstance";
 
 interface FormValue {
 	name: string;
@@ -29,6 +31,7 @@ interface GamePageProps {
 }
 
 const GamePage: React.FC<GamePageProps> = (props) => {
+	const toast = useToast();
 	const [selectedCategory, setSelectedCategory] =
 		useState<CategoryBoxProps | null>(null);
 	const [formValue, setFormValue] = useState<FormValue>({
@@ -51,23 +54,49 @@ const GamePage: React.FC<GamePageProps> = (props) => {
 		return formValue.name != "" && formValue.answer != "";
 	}, [formValue]);
 
-	const handleSubmit = () => {
+	const selectedQuestion = useMemo(() => {
+		if (selectedCategory == null) return null;
+		const question = props.questions.find(
+			(question) => question.categoryId === selectedCategory.categoryId
+		);
+		return question;
+	}, [selectedCategory, props.questions]);
+
+	const handleSubmit = async () => {
 		if (!validateForm) return;
-		alert(`name: ${formValue.name}, answer: ${formValue.answer}`);
+
+		const response = await axiosInstance.post(
+			`/questions/${selectedQuestion?.id}/answer`,
+			{
+				author: formValue.name,
+				answer: formValue.answer,
+			}
+		);
+
+		if (response.status === 201) {
+			toast({
+				title: "Success",
+				description: "Your answer has been submitted.",
+				status: "success",
+				duration: 9000,
+				isClosable: true,
+			});
+		} else {
+			toast({
+				title: "Error",
+				description: "An error occurred while submitting your answer.",
+				status: "error",
+				duration: 9000,
+				isClosable: true,
+			});
+		}
+
 		setFormValue({
 			name: "",
 			answer: "",
 		});
 		setSelectedCategory(null);
 	};
-
-	const selectedQuestion = useMemo(() => {
-		if (selectedCategory == null) return null;
-		const question = props.questions.find(
-			(question) => question.categoryId === selectedCategory.categoryId
-		);
-		return question?.question ?? "";
-	}, [selectedCategory, props.questions]);
 
 	return (
 		<>
@@ -99,7 +128,7 @@ const GamePage: React.FC<GamePageProps> = (props) => {
 						<Highlight
 							query="Question:"
 							styles={{ p: "1", bg: "green.100", rounded: "6" }}>
-							{`Question: ${selectedQuestion}`}
+							{`Question: ${selectedQuestion?.question}`}
 						</Highlight>
 						<Badge
 							mx="2"
