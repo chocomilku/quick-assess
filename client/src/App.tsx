@@ -8,6 +8,7 @@ import LogsPage from "@/pages/Logs";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LoginPage from "@/pages/Auth/LoginPage";
 import QuestionsPage from "./pages/Admin/QuestionsPage";
+import AnswersPage from "./pages/Admin/AnswersPage";
 
 function App() {
 	const bg = useColorModeValue("gray.50", "gray.800");
@@ -39,6 +40,14 @@ function App() {
 							element={
 								<ProtectedRoute>
 									<QuestionsPage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="/questions/:questionId/answers"
+							element={
+								<ProtectedRoute>
+									<AnswersPage />
 								</ProtectedRoute>
 							}
 						/>

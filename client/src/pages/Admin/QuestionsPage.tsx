@@ -85,6 +85,10 @@ const QuestionsPage: React.FC = () => {
 		}
 	};
 
+	const handleNavigateToAnswers = (questionId: number) => {
+		navigate(`/questions/${questionId}/answers`);
+	};
+
 	return (
 		<>
 			<Heading my="4" textAlign="center">
@@ -122,6 +126,7 @@ const QuestionsPage: React.FC = () => {
 								icon={<BiCommentEdit />}
 								tooltipLabel="Check answers"
 								tooltipPlacement="top"
+								onClick={() => handleNavigateToAnswers(question.id)}
 							/>,
 							<BaseIconButton
 								ariaLabel="Edit the question"

@@ -12,8 +12,17 @@ export const fetchQuestionController: RequestHandler = async (
 
 		const questions = await db
 			.selectFrom("questions")
-			.where("id", "==", +id)
-			.selectAll()
+			.innerJoin("category", "category.id", "questions.categoryId")
+			.where("questions.id", "==", +id)
+			.select([
+				"questions.id",
+				"questions.gameId",
+				"questions.categoryId",
+				"questions.question",
+				"category.text",
+				"category.points",
+				"category.color",
+			])
 			.execute();
 
 		if (questions.length === 0) throw new NotFoundError("Question not found");

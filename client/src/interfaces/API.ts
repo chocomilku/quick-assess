@@ -24,3 +24,14 @@ export interface Logs {
 	timestamp: string;
 	action: string;
 }
+
+export interface Answer {
+	id: number;
+	timestamp: string;
+	answer: string;
+	author: string;
+	isPass: number | null;
+	questionId: number;
+	categoryId: number;
+	gameId: number;
+}

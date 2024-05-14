@@ -7,6 +7,6 @@ const router = Router();
 
 router.get("/:id", fetchAnswerController);
 
-router.put("/:id", AuthMiddleware, updateAnswerStatusController);
+router.patch("/:id", AuthMiddleware, updateAnswerStatusController);
 
 export default router;
