@@ -88,7 +88,7 @@ const CategoriesPage: React.FC = () => {
 			<Heading my="4" textAlign="center">
 				Game {gameId}/Categories&nbsp;
 				<IconButton
-					aria-label="Add game"
+					aria-label="Add category"
 					icon={<BiPlus />}
 					size="sm"
 					onClick={addCategoryModalControls.onOpen}
@@ -126,7 +126,7 @@ const CategoriesPage: React.FC = () => {
 								ariaLabel="Delete the category"
 								colorScheme="red"
 								icon={<BiTrash />}
-								tooltipLabel="Delete game (THIS WILL DELETE ITS QUESTIONS)"
+								tooltipLabel="Delete category (THIS WILL DELETE ITS QUESTIONS)"
 								tooltipPlacement="top"
 								onClick={() => handleModifyCategory(category.id, "delete")}
 							/>,

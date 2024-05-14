@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import { NotFoundError } from "@middleware/errors";
 import { RequestHandler } from "express";
 
@@ -21,6 +22,7 @@ export const deleteQuestionController: RequestHandler = async (
 
 		await db.deleteFrom("questions").where("id", "==", +id).execute();
 
+		logAction(`Question ${id} have been deleted.`);
 		return res.status(204).end();
 	} catch (err) {
 		next(err);

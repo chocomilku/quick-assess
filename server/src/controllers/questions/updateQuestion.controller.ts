@@ -1,4 +1,5 @@
 import { db } from "@database";
+import { logAction } from "@helpers/logging/log";
 import {
 	BadRequestError,
 	InternalServerError,
@@ -45,6 +46,8 @@ export const updateQuestionController: RequestHandler = async (
 
 		if (updateQuestion.numUpdatedRows <= 0)
 			throw new InternalServerError("Question not updated");
+
+		logAction(`Question ${id} has been updated.`);
 
 		return res.status(200).json({ updated: +id, ...sanitizedBody.data });
 	} catch (err) {

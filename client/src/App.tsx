@@ -7,6 +7,7 @@ import CategoriesPage from "@/pages/Admin/CategoriesPage";
 import LogsPage from "@/pages/Logs";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import LoginPage from "@/pages/Auth/LoginPage";
+import QuestionsPage from "./pages/Admin/QuestionsPage";
 
 function App() {
 	const bg = useColorModeValue("gray.50", "gray.800");
@@ -30,6 +31,14 @@ function App() {
 							element={
 								<ProtectedRoute>
 									<CategoriesPage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="/games/:gameId/questions"
+							element={
+								<ProtectedRoute>
+									<QuestionsPage />
 								</ProtectedRoute>
 							}
 						/>

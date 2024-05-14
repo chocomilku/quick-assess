@@ -3,10 +3,12 @@ import { fetchCategoryController } from "@controllers/category/fetchCategory.con
 import { updateCategoryController } from "@controllers/category/updateCategory.controller";
 import { Router } from "express";
 import { AuthMiddleware } from "@middleware/user/auth.middleware";
+import { fetchQuestionsByCategoryController } from "@controllers/questions/fetchQuestionByCategory.controller";
 
 const router = Router();
 
 router.get("/:id", fetchCategoryController);
+router.get("/:id/questions", fetchQuestionsByCategoryController);
 
 router.put("/:id", AuthMiddleware, updateCategoryController);
 

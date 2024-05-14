@@ -114,6 +114,10 @@ const GamesPage: React.FC = () => {
 		navigate(`/games/${gameId}/categories`);
 	};
 
+	const handleNavigateToQuestions = (gameId: number) => {
+		navigate(`/games/${gameId}/questions`);
+	};
+
 	return (
 		<>
 			<Heading my="4" textAlign="center">
@@ -169,6 +173,7 @@ const GamesPage: React.FC = () => {
 									icon={<BiQuestionMark />}
 									tooltipLabel="Questions"
 									tooltipPlacement="top"
+									onClick={() => handleNavigateToQuestions(game.id)}
 								/>,
 								<BaseIconButton
 									ariaLabel="Start/Stop the game"

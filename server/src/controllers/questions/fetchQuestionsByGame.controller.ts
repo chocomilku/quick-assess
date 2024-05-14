@@ -11,8 +11,17 @@ export const fetchQuestionsByGameController: RequestHandler = async (
 
 		const questions = await db
 			.selectFrom("questions")
-			.where("gameId", "==", +id)
-			.selectAll()
+			.innerJoin("category", "category.id", "questions.categoryId")
+			.where("questions.gameId", "==", +id)
+			.select([
+				"questions.id",
+				"questions.gameId",
+				"questions.categoryId",
+				"questions.question",
+				"category.text",
+				"category.points",
+				"category.color",
+			])
 			.execute();
 
 		return res.status(200).json(questions);

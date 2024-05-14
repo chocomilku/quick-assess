@@ -29,7 +29,7 @@ const ListItem: React.FC<ListItemProps> = (props) => {
 							{props.identifier.label.toUpperCase()}: {props.identifier.value}
 						</Tag>
 						<Text fontWeight="bold">&nbsp;{props.text}</Text>
-						&nbsp;{props.children}
+						<Box>&nbsp;{props.children}</Box>
 					</Flex>
 					<Flex w="full" gap="2" justifyContent="flex-end" alignItems="center">
 						{props.actions}
