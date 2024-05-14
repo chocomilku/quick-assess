@@ -6,20 +6,24 @@ import { Heading, Text, Box } from "@chakra-ui/react";
 const LogsPage: React.FC = () => {
 	const [logs, setLogs] = useState<Logs[]>([]);
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			axiosInstance
-				.get<Logs[]>("/logs")
-				.then((response) => {
-					setLogs(response.data);
-				})
-				.catch((error) => {
-					console.error(error);
-				});
-		}, 10000); // Fetch every 10 seconds
+	const fetchLogs = () => {
+		axiosInstance
+			.get<Logs[]>("/logs")
+			.then((response) => {
+				setLogs(response.data);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
 
-		return () => clearInterval(interval); // Clean up on component unmount
-	}, [logs]);
+	useEffect(() => {
+		fetchLogs();
+
+		const interval = setInterval(fetchLogs, 10000);
+
+		return () => clearInterval(interval);
+	}, []);
 
 	return (
 		<>
