@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "@/api/axiosInstance";
 import { Game } from "@/interfaces/API";
-import {
-	Heading,
-	useToast,
-	Text,
-	Tag,
-	Flex,
-	IconButton,
-	useDisclosure,
-} from "@chakra-ui/react";
+import { Heading, useToast, IconButton, useDisclosure } from "@chakra-ui/react";
 import {
 	BiCategory,
 	BiQuestionMark,
@@ -24,10 +16,12 @@ import EditGameModal from "./Modals/EditGameModal";
 import ListItem from "@/components/ListItem";
 import BaseIconButton from "@/components/IconButtons/BaseIconButton";
 import DeleteGameModal from "./Modals/DeleteGameModal";
+import { useNavigate } from "react-router-dom";
 
 const GamesPage: React.FC = () => {
 	const [games, setGames] = useState<Game[]>([]);
 	const toast = useToast();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		axiosInstance
@@ -116,6 +110,10 @@ const GamesPage: React.FC = () => {
 		deleteGameModalControls.onOpen();
 	};
 
+	const handleNavigateToCategories = (gameId: number) => {
+		navigate(`/games/${gameId}/categories`);
+	};
+
 	return (
 		<>
 			<Heading my="4" textAlign="center">
@@ -148,69 +146,56 @@ const GamesPage: React.FC = () => {
 			{games.map((game, index) => {
 				return (
 					<>
-						<ListItem key={index}>
-							<Flex>
-								<Flex
-									w="full"
-									flexDirection="row"
-									flexWrap="wrap"
-									justifyContent="flex-start"
-									alignItems="center">
-									<Tag size="md" variant="subtle" colorScheme="green">
-										GAME: {game.id}
-									</Tag>
-									<Text fontWeight="bold">&nbsp;{game.name}</Text>
-								</Flex>
-								<Flex
-									w="full"
-									gap="2"
-									justifyContent="flex-end"
-									alignItems="center">
-									<BaseIconButton
-										ariaLabel="Go to categories page"
-										colorScheme="purple"
-										icon={<BiCategory />}
-										tooltipLabel="Categories"
-										tooltipPlacement="top"
-									/>
-
-									<BaseIconButton
-										ariaLabel="Go to questions page"
-										colorScheme="pink"
-										icon={<BiQuestionMark />}
-										tooltipLabel="Questions"
-										tooltipPlacement="top"
-									/>
-
-									<BaseIconButton
-										ariaLabel="Start/Stop the game"
-										colorScheme={game.isRunning ? "orange" : "green"}
-										icon={game.isRunning ? <BiStop /> : <BiPlay />}
-										tooltipLabel="Start/Stop the game"
-										tooltipPlacement="top"
-										onClick={() => handleToggleGameState(game.id)}
-									/>
-
-									<BaseIconButton
-										ariaLabel="Edit the game"
-										colorScheme="blue"
-										icon={<BiEdit />}
-										tooltipLabel="Edit game"
-										tooltipPlacement="top"
-										onClick={() => handleEditModalOpen(game.id)}
-									/>
-
-									<BaseIconButton
-										ariaLabel="Delete the game"
-										colorScheme="red"
-										icon={<BiTrash />}
-										tooltipLabel="Delete game (THIS WILL DELETE ITS CATEGORIES AND QUESTIONS)"
-										tooltipPlacement="top"
-										onClick={() => handleDeleteModalOpen(game.id)}
-									/>
-								</Flex>
-							</Flex>
-						</ListItem>
+						<ListItem
+							key={index}
+							identifier={{
+								label: "Game",
+								value: game.id.toString(),
+								colorScheme: "green",
+							}}
+							text={game.name}
+							actions={[
+								<BaseIconButton
+									ariaLabel="Go to categories page"
+									colorScheme="purple"
+									icon={<BiCategory />}
+									tooltipLabel="Categories"
+									tooltipPlacement="top"
+									onClick={() => handleNavigateToCategories(game.id)}
+								/>,
+								<BaseIconButton
+									ariaLabel="Go to questions page"
+									colorScheme="pink"
+									icon={<BiQuestionMark />}
+									tooltipLabel="Questions"
+									tooltipPlacement="top"
+								/>,
+								<BaseIconButton
+									ariaLabel="Start/Stop the game"
+									colorScheme={game.isRunning ? "orange" : "green"}
+									icon={game.isRunning ? <BiStop /> : <BiPlay />}
+									tooltipLabel="Start/Stop the game"
+									tooltipPlacement="top"
+									onClick={() => handleToggleGameState(game.id)}
+								/>,
+								<BaseIconButton
+									ariaLabel="Edit the game"
+									colorScheme="blue"
+									icon={<BiEdit />}
+									tooltipLabel="Edit game"
+									tooltipPlacement="top"
+									onClick={() => handleEditModalOpen(game.id)}
+								/>,
+								<BaseIconButton
+									ariaLabel="Delete the game"
+									colorScheme="red"
+									icon={<BiTrash />}
+									tooltipLabel="Delete game (THIS WILL DELETE ITS CATEGORIES AND QUESTIONS)"
+									tooltipPlacement="top"
+									onClick={() => handleDeleteModalOpen(game.id)}
+								/>,
+							]}
+						/>
 					</>
 				);
 			})}

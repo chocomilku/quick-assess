@@ -1,11 +1,12 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { Container, useColorModeValue } from "@chakra-ui/react";
-import NotFoundPage from "./pages/NotFound";
-import AppPage from "./pages/AppPage";
-import GamesPage from "./pages/Admin/GamesPage";
-import LogsPage from "./pages/Logs";
-import ProtectedRoute from "./components/ProtectedRoute";
-import LoginPage from "./pages/Auth/LoginPage";
+import NotFoundPage from "@/pages/NotFound";
+import AppPage from "@/pages/AppPage";
+import GamesPage from "@/pages/Admin/GamesPage";
+import CategoriesPage from "@/pages/Admin/CategoriesPage";
+import LogsPage from "@/pages/Logs";
+import ProtectedRoute from "@/components/ProtectedRoute";
+import LoginPage from "@/pages/Auth/LoginPage";
 
 function App() {
 	const bg = useColorModeValue("gray.50", "gray.800");
@@ -21,6 +22,14 @@ function App() {
 							element={
 								<ProtectedRoute>
 									<GamesPage />
+								</ProtectedRoute>
+							}
+						/>
+						<Route
+							path="/games/:gameId/categories"
+							element={
+								<ProtectedRoute>
+									<CategoriesPage />
 								</ProtectedRoute>
 							}
 						/>
