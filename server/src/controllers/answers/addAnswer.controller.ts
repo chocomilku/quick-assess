@@ -41,6 +41,17 @@ export const addAnswerController: RequestHandler = async (req, res, next) => {
 		if (!sanitizedBody.success)
 			throw new BadRequestError(fromZodError(sanitizedBody.error).message);
 
+		const checkAuthor = await db
+			.selectFrom("answers")
+			.selectAll()
+			.where("author", "==", sanitizedBody.data.author)
+			.where("gameId", "==", sanitizedBody.data.gameId)
+			.execute();
+
+		if (checkAuthor.length > 0) {
+			throw new BadRequestError("You have already answered this topic.");
+		}
+
 		const addAnswer = await db
 			.insertInto("answers")
 			.values({

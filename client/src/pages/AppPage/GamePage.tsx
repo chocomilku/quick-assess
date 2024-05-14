@@ -18,6 +18,7 @@ import { CategoryBoxProps } from "../../components/CategoryBox";
 import { useMemo, useState } from "react";
 import { Category, Question } from "@/interfaces/API";
 import axiosInstance from "@/api/axiosInstance";
+import axios from "axios";
 
 interface FormValue {
 	name: string;
@@ -63,39 +64,59 @@ const GamePage: React.FC<GamePageProps> = (props) => {
 	}, [selectedCategory, props.questions]);
 
 	const handleSubmit = async () => {
-		if (!validateForm) return;
+		try {
+			if (!validateForm) return;
 
-		const response = await axiosInstance.post(
-			`/questions/${selectedQuestion?.id}/answer`,
-			{
-				author: formValue.name,
-				answer: formValue.answer,
+			const response = await axiosInstance.post(
+				`/questions/${selectedQuestion?.id}/answer`,
+				{
+					author: formValue.name,
+					answer: formValue.answer,
+				}
+			);
+
+			if (response.status === 201) {
+				toast({
+					title: "Success",
+					description: "Your answer has been submitted.",
+					status: "success",
+					duration: 9000,
+					isClosable: true,
+				});
 			}
-		);
-
-		if (response.status === 201) {
-			toast({
-				title: "Success",
-				description: "Your answer has been submitted.",
-				status: "success",
-				duration: 9000,
-				isClosable: true,
+			setFormValue({
+				name: "",
+				answer: "",
 			});
-		} else {
-			toast({
-				title: "Error",
-				description: "An error occurred while submitting your answer.",
-				status: "error",
-				duration: 9000,
-				isClosable: true,
-			});
+			setSelectedCategory(null);
+		} catch (err) {
+			if (axios.isAxiosError(err) && err.response) {
+				if (err.response.status === 400) {
+					toast({
+						title: "Error",
+						description: err.response.data.error,
+						status: "error",
+						duration: 9000,
+						isClosable: true,
+					});
+					setFormValue({
+						name: "",
+						answer: "",
+					});
+					setSelectedCategory(null);
+					return;
+				}
+			} else {
+				toast({
+					title: "Error",
+					description: "An error occurred while submitting your answer.",
+					status: "error",
+					duration: 9000,
+					isClosable: true,
+				});
+			}
+			console.error(err);
 		}
-
-		setFormValue({
-			name: "",
-			answer: "",
-		});
-		setSelectedCategory(null);
 	};
 
 	return (
