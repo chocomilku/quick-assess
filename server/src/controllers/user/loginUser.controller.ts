@@ -37,11 +37,17 @@ export const LoginUserController: RequestHandler = async (req, res, next) => {
 
 		if (!isPasswordCorrect) throw new BadRequestError("Incorrect credentials");
 
-		const token = jwt.sign({ id: user[0].id }, secrets.JWT_SECRET, {
-			expiresIn: "never",
-		});
+		const token = jwt.sign(
+			{ id: user[0].id, username: sanitizedBody.data.username },
+			secrets.JWT_SECRET,
+			{
+				expiresIn: "1d",
+			}
+		);
 
-		res.send(token);
+		return res.status(200).json({
+			token,
+		});
 	} catch (err) {
 		next(err);
 	}

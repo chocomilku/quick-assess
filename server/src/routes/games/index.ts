@@ -9,6 +9,7 @@ import { updateGameController } from "@controllers/games/updateGame.controller";
 import { deleteGameController } from "@controllers/games/deleteGame.controller";
 import { addQuestionController } from "@controllers/questions/addQuestion.controller";
 import { addCategoryController } from "@controllers/category/addCategory.controller";
+import { AuthMiddleware } from "@middleware/user/auth.middleware";
 
 const router = Router();
 
@@ -17,14 +18,14 @@ router.get("/:id/questions", fetchQuestionsByGameController);
 router.get("/:id", fetchGameController);
 router.get("/", fetchGamesController);
 
-router.post("/", addGameController);
-router.post("/:gameId/questions", addQuestionController);
-router.post("/:gameId/category", addCategoryController);
+router.post("/", AuthMiddleware, addGameController);
+router.post("/:gameId/questions", AuthMiddleware, addQuestionController);
+router.post("/:gameId/category", AuthMiddleware, addCategoryController);
 
-router.patch("/:id", updateGameStatusController);
+router.patch("/:id", AuthMiddleware, updateGameStatusController);
 
-router.put("/:id", updateGameController);
+router.put("/:id", AuthMiddleware, updateGameController);
 
-router.delete("/:id", deleteGameController);
+router.delete("/:id", AuthMiddleware, deleteGameController);
 
 export default router;
