@@ -2,5 +2,14 @@
 	"name": "quick-assess",
 	"version": "0.0.0",
 	"author": "chocomilku",
-	"license": "MIT"
+	"license": "MIT",
+	"scripts": {
+		"client": "cd client && npm run preview",
+		"server": "cd server && npm run start",
+		"start": "concurrently --names 'client,server' --prefix-colors 'bgCyan.bold,bgMagenta.bold' 'npm run client' 'npm run server'"
+	},
+	"dependencies": {
+		"chalk": "^5.3.0",
+		"concurrently": "^8.2.2"
+	}
 }
