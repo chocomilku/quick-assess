@@ -10,6 +10,8 @@ import {
 	Flex,
 	IconButton,
 	Tooltip,
+	useDisclosure,
+	Input,
 } from "@chakra-ui/react";
 import {
 	BiCategory,
@@ -17,7 +19,10 @@ import {
 	BiPlay,
 	BiEdit,
 	BiTrash,
+	BiStop,
+	BiPlus,
 } from "react-icons/bi";
+import BaseModal from "@/components/BaseModal";
 
 const GamesPage: React.FC = () => {
 	const [games, setGames] = useState<Game[]>([]);
@@ -41,10 +46,65 @@ const GamesPage: React.FC = () => {
 			});
 	}, []);
 
+	const handleToggleGameState = (gameId: number) => {
+		axiosInstance
+			.patch<{ updated: number; isRunning: boolean }>(`/games/${gameId}`, {
+				isRunning: !Boolean(
+					games.find((game) => game.id === gameId)?.isRunning
+				),
+			})
+			.then((response) => {
+				toast({
+					title: "Success",
+					description: `Game state changed to ${response.data.isRunning}.`,
+					status: "success",
+					duration: 9000,
+					isClosable: true,
+				});
+			})
+			.catch((error) => {
+				toast({
+					title: "Error",
+					description: `An error occurred while toggling game state. ${error.response?.data.error}`,
+					status: "error",
+					duration: 9000,
+					isClosable: true,
+				});
+				console.error(error);
+			});
+
+		setGames(
+			games.map((game) => {
+				if (game.id === gameId) {
+					return {
+						...game,
+						isRunning: Number(!game.isRunning),
+					};
+				}
+				return game;
+			})
+		);
+	};
+
+	const addGameModalControls = useDisclosure();
+
 	return (
 		<>
 			<Heading my="4" textAlign="center">
-				Games
+				Games{" "}
+				<IconButton
+					aria-label="Add game"
+					icon={<BiPlus />}
+					size="sm"
+					onClick={addGameModalControls.onOpen}
+				/>
+				<BaseModal {...addGameModalControls} title="Add Game">
+					<Text>Name:</Text>
+					<Input type="text" />
+					{/* // move this to a separate component 
+					// handle submission on the
+					separate component */}
+				</BaseModal>
 			</Heading>
 			{games.map((game, index) => (
 				<Box
@@ -83,15 +143,16 @@ const GamesPage: React.FC = () => {
 								<IconButton
 									aria-label="Go to questions page"
 									icon={<BiQuestionMark />}
-									colorScheme="orange"
+									colorScheme="pink"
 								/>
 							</Tooltip>
 
 							<Tooltip label="Start/Stop the game" placement="top">
 								<IconButton
 									aria-label="Start/Stop the game"
-									icon={<BiPlay />}
-									colorScheme="green"
+									icon={game.isRunning ? <BiStop /> : <BiPlay />}
+									colorScheme={game.isRunning ? "orange" : "green"}
+									onClick={() => handleToggleGameState(game.id)}
 								/>
 							</Tooltip>
 
