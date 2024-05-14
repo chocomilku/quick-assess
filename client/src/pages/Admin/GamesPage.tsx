@@ -4,12 +4,10 @@ import { Game } from "@/interfaces/API";
 import {
 	Heading,
 	useToast,
-	Box,
 	Text,
 	Tag,
 	Flex,
 	IconButton,
-	Tooltip,
 	useDisclosure,
 } from "@chakra-ui/react";
 import {
@@ -23,6 +21,8 @@ import {
 } from "react-icons/bi";
 import AddGameModal from "./Modals/AddGameModal";
 import EditGameModal from "./Modals/EditGameModal";
+import ListItem from "@/components/ListItem";
+import BaseIconButton from "@/components/IconButtons/BaseIconButton";
 
 const GamesPage: React.FC = () => {
 	const [games, setGames] = useState<Game[]>([]);
@@ -88,6 +88,19 @@ const GamesPage: React.FC = () => {
 	const addGameModalControls = useDisclosure();
 	const editGameModalControls = useDisclosure();
 
+	const [selectedGameEdit, setSelectedGameEdit] = useState<Game>({
+		id: -1,
+		name: "",
+		isRunning: 0,
+	});
+
+	const handleEditModalOpen = (gameId: number) => {
+		const findGame = games.find((game) => game.id === gameId);
+		if (!findGame) return;
+		setSelectedGameEdit(findGame);
+		editGameModalControls.onOpen();
+	};
+
 	return (
 		<>
 			<Heading my="4" textAlign="center">
@@ -104,84 +117,81 @@ const GamesPage: React.FC = () => {
 					onOpen={addGameModalControls.onOpen}
 				/>
 			</Heading>
-			{games.map((game, index) => (
-				<Box
-					key={index}
-					border="1px"
-					borderColor="gray.200"
-					borderRadius="md"
-					p="4"
-					my="2">
-					<Flex>
-						<Flex
-							w="full"
-							flexDirection="row"
-							flexWrap="wrap"
-							justifyContent="flex-start"
-							alignItems="center">
-							<Tag size="md" variant="subtle" colorScheme="green">
-								GAME: {game.id}
-							</Tag>
-							<Text fontWeight="bold">&nbsp;{game.name}</Text>
-						</Flex>
-						<Flex
-							w="full"
-							gap="2"
-							justifyContent="flex-end"
-							alignItems="center">
-							<Tooltip label="Categories" placement="top">
-								<IconButton
-									aria-label="Go to categories page"
-									icon={<BiCategory />}
-									colorScheme="purple"
-								/>
-							</Tooltip>
+			<EditGameModal
+				isOpen={editGameModalControls.isOpen}
+				onClose={editGameModalControls.onClose}
+				onOpen={editGameModalControls.onOpen}
+				data={selectedGameEdit}
+			/>
 
-							<Tooltip label="Questions" placement="top">
-								<IconButton
-									aria-label="Go to questions page"
-									icon={<BiQuestionMark />}
-									colorScheme="pink"
-								/>
-							</Tooltip>
+			{games.map((game, index) => {
+				return (
+					<>
+						<ListItem key={index}>
+							<Flex>
+								<Flex
+									w="full"
+									flexDirection="row"
+									flexWrap="wrap"
+									justifyContent="flex-start"
+									alignItems="center">
+									<Tag size="md" variant="subtle" colorScheme="green">
+										GAME: {game.id}
+									</Tag>
+									<Text fontWeight="bold">&nbsp;{game.name}</Text>
+								</Flex>
+								<Flex
+									w="full"
+									gap="2"
+									justifyContent="flex-end"
+									alignItems="center">
+									<BaseIconButton
+										ariaLabel="Go to categories page"
+										colorScheme="purple"
+										icon={<BiCategory />}
+										tooltipLabel="Categories"
+										tooltipPlacement="top"
+									/>
 
-							<Tooltip label="Start/Stop the game" placement="top">
-								<IconButton
-									aria-label="Start/Stop the game"
-									icon={game.isRunning ? <BiStop /> : <BiPlay />}
-									colorScheme={game.isRunning ? "orange" : "green"}
-									onClick={() => handleToggleGameState(game.id)}
-								/>
-							</Tooltip>
+									<BaseIconButton
+										ariaLabel="Go to questions page"
+										colorScheme="pink"
+										icon={<BiQuestionMark />}
+										tooltipLabel="Questions"
+										tooltipPlacement="top"
+									/>
 
-							<Tooltip label="Edit game" placement="top">
-								<IconButton
-									aria-label="Edit the game"
-									icon={<BiEdit />}
-									colorScheme="blue"
-									onClick={editGameModalControls.onOpen}
-								/>
-							</Tooltip>
-							<EditGameModal
-								isOpen={editGameModalControls.isOpen}
-								onClose={editGameModalControls.onClose}
-								onOpen={editGameModalControls.onOpen}
-								data={game}
-							/>
+									<BaseIconButton
+										ariaLabel="Start/Stop the game"
+										colorScheme={game.isRunning ? "orange" : "green"}
+										icon={game.isRunning ? <BiStop /> : <BiPlay />}
+										tooltipLabel="Start/Stop the game"
+										tooltipPlacement="top"
+										onClick={() => handleToggleGameState(game.id)}
+									/>
 
-							<Tooltip
-								label="Delete game (THIS WILL DELETE ITS CATEGORIES AND QUESTIONS)"
-								placement="top">
-								<IconButton
-									aria-label="Delete the game"
-									icon={<BiTrash />}
-									colorScheme="red"
-								/>
-							</Tooltip>
-						</Flex>
-					</Flex>
-				</Box>
-			))}
+									<BaseIconButton
+										ariaLabel="Edit the game"
+										colorScheme="blue"
+										icon={<BiEdit />}
+										tooltipLabel="Edit game"
+										tooltipPlacement="top"
+										onClick={() => handleEditModalOpen(game.id)}
+									/>
+
+									<BaseIconButton
+										ariaLabel="Delete the game"
+										colorScheme="red"
+										icon={<BiTrash />}
+										tooltipLabel="Delete game (THIS WILL DELETE ITS CATEGORIES AND QUESTIONS)"
+										tooltipPlacement="top"
+									/>
+								</Flex>
+							</Flex>
+						</ListItem>
+					</>
+				);
+			})}
 		</>
 	);
 };

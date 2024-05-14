@@ -3,6 +3,7 @@ import { Input, Text, useToast } from "@chakra-ui/react";
 import axiosInstance from "@/api/axiosInstance";
 import { useFormValue } from "@/hooks/useFormValue";
 import { Game } from "@/interfaces/API";
+import { useEffect } from "react";
 
 interface EditGameModalProps {
 	onOpen: () => void;
@@ -20,6 +21,10 @@ const EditGameModal: React.FC<EditGameModalProps> = (props) => {
 		name: props.data.name,
 	});
 	const toast = useToast();
+
+	useEffect(() => {
+		handleFormValue("name", props.data.name);
+	}, [props.data.name]);
 
 	const validateForm = formValue.name != "";
 
