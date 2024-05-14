@@ -9,12 +9,14 @@ import {
 	ModalBody,
 	ModalCloseButton,
 	ThemingProps,
-	UseDisclosureProps,
 } from "@chakra-ui/react";
 
-interface BaseModalProps extends UseDisclosureProps {
+interface BaseModalProps {
 	title: string;
 	children: ReactNode;
+	isOpen: boolean;
+	onOpen: () => void;
+	onClose: () => void;
 	action?: {
 		onClick: () => void;
 		text: string;
@@ -24,7 +26,7 @@ interface BaseModalProps extends UseDisclosureProps {
 
 const BaseModal: React.FC<BaseModalProps> = (props) => {
 	return (
-		<Modal isOpen={props.isOpen ?? false} onClose={props.onClose || (() => {})}>
+		<Modal isOpen={props.isOpen} onClose={props.onClose}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>{props.title}</ModalHeader>

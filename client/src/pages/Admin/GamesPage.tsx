@@ -11,7 +11,6 @@ import {
 	IconButton,
 	Tooltip,
 	useDisclosure,
-	Input,
 } from "@chakra-ui/react";
 import {
 	BiCategory,
@@ -22,7 +21,8 @@ import {
 	BiStop,
 	BiPlus,
 } from "react-icons/bi";
-import BaseModal from "@/components/BaseModal";
+import AddGameModal from "./Modals/AddGameModal";
+import EditGameModal from "./Modals/EditGameModal";
 
 const GamesPage: React.FC = () => {
 	const [games, setGames] = useState<Game[]>([]);
@@ -61,6 +61,17 @@ const GamesPage: React.FC = () => {
 					duration: 9000,
 					isClosable: true,
 				});
+				setGames(
+					games.map((game) => {
+						if (game.id === gameId) {
+							return {
+								...game,
+								isRunning: Number(!game.isRunning),
+							};
+						}
+						return game;
+					})
+				);
 			})
 			.catch((error) => {
 				toast({
@@ -72,21 +83,10 @@ const GamesPage: React.FC = () => {
 				});
 				console.error(error);
 			});
-
-		setGames(
-			games.map((game) => {
-				if (game.id === gameId) {
-					return {
-						...game,
-						isRunning: Number(!game.isRunning),
-					};
-				}
-				return game;
-			})
-		);
 	};
 
 	const addGameModalControls = useDisclosure();
+	const editGameModalControls = useDisclosure();
 
 	return (
 		<>
@@ -98,13 +98,11 @@ const GamesPage: React.FC = () => {
 					size="sm"
 					onClick={addGameModalControls.onOpen}
 				/>
-				<BaseModal {...addGameModalControls} title="Add Game">
-					<Text>Name:</Text>
-					<Input type="text" />
-					{/* // move this to a separate component 
-					// handle submission on the
-					separate component */}
-				</BaseModal>
+				<AddGameModal
+					isOpen={addGameModalControls.isOpen}
+					onClose={addGameModalControls.onClose}
+					onOpen={addGameModalControls.onOpen}
+				/>
 			</Heading>
 			{games.map((game, index) => (
 				<Box
@@ -161,8 +159,15 @@ const GamesPage: React.FC = () => {
 									aria-label="Edit the game"
 									icon={<BiEdit />}
 									colorScheme="blue"
+									onClick={editGameModalControls.onOpen}
 								/>
 							</Tooltip>
+							<EditGameModal
+								isOpen={editGameModalControls.isOpen}
+								onClose={editGameModalControls.onClose}
+								onOpen={editGameModalControls.onOpen}
+								data={game}
+							/>
 
 							<Tooltip
 								label="Delete game (THIS WILL DELETE ITS CATEGORIES AND QUESTIONS)"

@@ -2,20 +2,22 @@ import BaseModal from "@/components/BaseModal";
 import { Input, Text, useToast } from "@chakra-ui/react";
 import axiosInstance from "@/api/axiosInstance";
 import { useFormValue } from "@/hooks/useFormValue";
+import { Game } from "@/interfaces/API";
 
-interface AddGameModalProps {
+interface EditGameModalProps {
 	onOpen: () => void;
 	isOpen: boolean;
 	onClose: () => void;
+	data: Game;
 }
 
-interface AddGameFormValue {
-	name: string;
-}
+interface EditGameFormValue extends Omit<Game, "id"> {}
 
-const AddGameModal: React.FC<AddGameModalProps> = (props) => {
-	const [formValue, handleFormValue] = useFormValue<AddGameFormValue>({
-		name: "",
+const EditGameModal: React.FC<EditGameModalProps> = (props) => {
+	const [formValue, handleFormValue] = useFormValue<
+		Omit<EditGameFormValue, "isRunning">
+	>({
+		name: props.data.name,
 	});
 	const toast = useToast();
 
@@ -32,15 +34,15 @@ const AddGameModal: React.FC<AddGameModalProps> = (props) => {
 					isClosable: true,
 				});
 
-			const response = await axiosInstance.post<{ added: number }>(
-				"/games",
+			const response = await axiosInstance.put<{ updated: number }>(
+				`/games/${props.data.id}`,
 				formValue
 			);
 
-			if (response.status === 201) {
+			if (response.status === 200) {
 				toast({
 					title: "Success",
-					description: `Game ${response.data.added} has been added.`,
+					description: `Game ${response.data.updated} has been edited.`,
 					status: "success",
 					duration: 9000,
 					isClosable: true,
@@ -51,7 +53,7 @@ const AddGameModal: React.FC<AddGameModalProps> = (props) => {
 		} catch (error) {
 			toast({
 				title: "Error",
-				description: "An error occurred while adding the game.",
+				description: "An error occurred while editing the game.",
 				status: "error",
 				duration: 9000,
 				isClosable: true,
@@ -66,10 +68,10 @@ const AddGameModal: React.FC<AddGameModalProps> = (props) => {
 				isOpen={props.isOpen}
 				onOpen={props.onOpen}
 				onClose={props.onClose}
-				title="Add Game"
+				title={`Editing Game ${props.data.id}`}
 				action={{
 					onClick: handleSubmit,
-					text: "Add",
+					text: "Edit",
 					color: "green",
 				}}>
 				<Text>Game Name:</Text>
@@ -83,4 +85,4 @@ const AddGameModal: React.FC<AddGameModalProps> = (props) => {
 	);
 };
 
-export default AddGameModal;
+export default EditGameModal;
