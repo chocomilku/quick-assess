@@ -10,6 +10,19 @@ import jwt from "jsonwebtoken";
 export const LoginUserController: RequestHandler = async (req, res, next) => {
 	try {
 		const rawBody = req.body;
+		const query = req.query;
+
+		const sanitizedQuery = z
+			.object({
+				response_format: z
+					.union([z.literal("cookie"), z.literal("token")])
+					.optional()
+					.default("token"),
+			})
+			.safeParse(query);
+
+		if (!sanitizedQuery.success)
+			throw new BadRequestError(fromZodError(sanitizedQuery.error).message);
 
 		const sanitizedBody = z
 			.object({
@@ -45,9 +58,20 @@ export const LoginUserController: RequestHandler = async (req, res, next) => {
 			}
 		);
 
-		return res.status(200).json({
-			token,
-		});
+		if (sanitizedQuery.data.response_format === "cookie") {
+			res.cookie("token", token, {
+				maxAge: 1000 * 60 * 60 * 24,
+				httpOnly: true,
+				sameSite: "strict",
+			});
+			return res.status(200).json({
+				message: "Successfully logged in.",
+			});
+		} else if (sanitizedQuery.data.response_format === "token") {
+			return res.status(200).json({
+				token,
+			});
+		}
 	} catch (err) {
 		next(err);
 	}
