@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { Category, Game, Question } from "@/interfaces/API";
 import axiosInstance from "@/api/axiosInstance";
 
-// TODO: fetch status then do conditionals to show a waiting page and the game page based on status
-
 const AppPage: React.FC = () => {
 	const toast = useToast();
 	const [status, setStatus] = useState<Game>({

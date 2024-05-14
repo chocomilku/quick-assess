@@ -18,3 +18,9 @@ export interface Question {
 	categoryId: number;
 	question: string;
 }
+
+export interface Logs {
+	id: number;
+	timestamp: string;
+	action: string;
+}
