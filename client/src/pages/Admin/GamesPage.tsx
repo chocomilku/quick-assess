@@ -23,6 +23,7 @@ import AddGameModal from "./Modals/AddGameModal";
 import EditGameModal from "./Modals/EditGameModal";
 import ListItem from "@/components/ListItem";
 import BaseIconButton from "@/components/IconButtons/BaseIconButton";
+import DeleteGameModal from "./Modals/DeleteGameModal";
 
 const GamesPage: React.FC = () => {
 	const [games, setGames] = useState<Game[]>([]);
@@ -87,8 +88,15 @@ const GamesPage: React.FC = () => {
 
 	const addGameModalControls = useDisclosure();
 	const editGameModalControls = useDisclosure();
+	const deleteGameModalControls = useDisclosure();
 
 	const [selectedGameEdit, setSelectedGameEdit] = useState<Game>({
+		id: -1,
+		name: "",
+		isRunning: 0,
+	});
+
+	const [selectedGameDelete, setSelectedGameDelete] = useState<Game>({
 		id: -1,
 		name: "",
 		isRunning: 0,
@@ -99,6 +107,13 @@ const GamesPage: React.FC = () => {
 		if (!findGame) return;
 		setSelectedGameEdit(findGame);
 		editGameModalControls.onOpen();
+	};
+
+	const handleDeleteModalOpen = (gameId: number) => {
+		const findGame = games.find((game) => game.id === gameId);
+		if (!findGame) return;
+		setSelectedGameDelete(findGame);
+		deleteGameModalControls.onOpen();
 	};
 
 	return (
@@ -122,6 +137,12 @@ const GamesPage: React.FC = () => {
 				onClose={editGameModalControls.onClose}
 				onOpen={editGameModalControls.onOpen}
 				data={selectedGameEdit}
+			/>
+			<DeleteGameModal
+				isOpen={deleteGameModalControls.isOpen}
+				onClose={deleteGameModalControls.onClose}
+				onOpen={deleteGameModalControls.onOpen}
+				data={selectedGameDelete}
 			/>
 
 			{games.map((game, index) => {
@@ -185,6 +206,7 @@ const GamesPage: React.FC = () => {
 										icon={<BiTrash />}
 										tooltipLabel="Delete game (THIS WILL DELETE ITS CATEGORIES AND QUESTIONS)"
 										tooltipPlacement="top"
+										onClick={() => handleDeleteModalOpen(game.id)}
 									/>
 								</Flex>
 							</Flex>
